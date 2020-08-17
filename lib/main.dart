@@ -1,106 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My Curiosity Resolved',
       theme: ThemeData(
         primarySwatch: Colors.grey,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'My Curiosity Resolved'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() =>
+      _MyHomePageState(savedQuestions: List.generate(20, (i) {
+        return generateWordPairs().take(5).join(" ") + "?";
+      }));
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  _MyHomePageState({this.savedQuestions}) : super();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final List<String> savedQuestions;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("My Questions"),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Row>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-              Text(
-                'You have pushed the button this many times:',
-              )
-            ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-            ])
-          ],
-        ),
-      ),
+      body: _buildQuestionList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+    );
+  }
+
+  Widget _buildQuestionList() {
+    return ListView.builder(
+      padding: EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        if (i.isOdd) return Divider();
+
+        final actualIndex = i ~/ 2;
+        return _buildRowQuestionList(actualIndex);
+      },
+      itemCount: savedQuestions.length * 2,
+    );
+  }
+
+  Widget _buildRowQuestionList(int actualIndex) {
+    return ListTile(
+      title: Text(
+        savedQuestions[actualIndex],
+        style: TextStyle(
+          color: Colors.black54,
+          fontWeight: FontWeight.bold
+        ),
+        maxLines: 3,
+        
+      ),
     );
   }
 }
