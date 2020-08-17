@@ -6,7 +6,7 @@ First App in Flutter in which I can write the curious questions I have along the
 
 ### First Release (The basics)
 - [x] Show a list of random questions
-- [] Add a fab that redirect to a new screen
+- [x] Add a fab that redirect to a new screen
 - [] In the new screen add the elements to enter your question title and a save button
 - [] Start showing the questions forwarded from the "new question" screen.
 - [] Add persistance to the question list
