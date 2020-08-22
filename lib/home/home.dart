@@ -30,12 +30,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _newQuestionButtonClick(BuildContext context) async {
-    QuestionEntity newQuestionResults = await Navigator.of(context)
+    QuestionEntity newQuestion = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => QuestionDetailPage()));
 
-    print(newQuestionResults.toString());
+    if(newQuestion == null) return
+
+    print(newQuestion.toString());
     setState(() {
-      savedQuestions.add(newQuestionResults);
+      savedQuestions.add(newQuestion);
     });
   }
 
