@@ -19,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text("My Questions"),
       ),
-      body: _buildQuestionList(),
+      body: savedQuestions.isEmpty ? _buildEmptyQuestionListLayout() : _buildQuestionList(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -37,7 +37,33 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       savedQuestions.add(newQuestionResults);
     });
+  }
 
+  Widget _buildEmptyQuestionListLayout() {
+    return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Align(
+              alignment: FractionalOffset.center,
+              child: Image.asset(
+                'assets/no_questions_found.png',
+                width: 180,
+                height: 150,
+                alignment: Alignment.centerRight,
+              ),
+            ),
+            SizedBox(
+              height: 32.0,
+            ),
+            Text(
+              "No Questions Found",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+      );
   }
 
   Widget _buildQuestionList() {
