@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../entities/questionEntity.dart';
 
 class QuestionDetailPage extends StatefulWidget {
   @override
@@ -23,46 +24,53 @@ class _formComponent extends StatefulWidget {
 }
 
 class __formComponentState extends State<_formComponent> {
-  final _formKey = GlobalKey<FormState>();
+  final questionController = TextEditingController();
+  final questionAdditionalController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        key: _formKey,
         child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              new TextField(
-                maxLines: 2,
-                decoration: InputDecoration(
-                  hintText: "I'm asking myself...",
-                ),
-              ),
-              SizedBox(height: 10),
-              new TextField(
-                maxLines: null,
-                decoration: InputDecoration(
-                  hintText:
-                      "To be precise, with my question I'm taking about...",
-                ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: RaisedButton(
-                    color: Colors.deepPurpleAccent,
-                    textColor: Colors.white,
-                    onPressed: () => {
-                      Navigator.of(context).pop(true)
-                    },
-                    child: Text("Save my question"),
-                  ),
-                ),
-              ),
-            ],
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          new TextField(
+            controller: questionController,
+            maxLines: 2,
+            decoration: InputDecoration(
+              hintText: "I'm asking myself...",
+            ),
           ),
-        ));
+          SizedBox(height: 10),
+          new TextField(
+            controller: questionAdditionalController,
+            maxLines: null,
+            decoration: InputDecoration(
+              hintText: "To be precise, with my question I'm taking about...",
+            ),
+          ),
+          Expanded(
+            child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: RaisedButton(
+                color: Colors.deepPurpleAccent,
+                textColor: Colors.white,
+                onPressed: () => {_saveQuestionData(context)},
+                child: Text("Save my question"),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
+
+  _saveQuestionData(BuildContext context) {
+    QuestionEntity question = new QuestionEntity(
+        id: new DateTime.now().millisecondsSinceEpoch,
+        question: questionController.text,
+        questionDetails: questionAdditionalController.text);
+    Navigator.of(context).pop(question);
   }
 }

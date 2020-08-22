@@ -1,22 +1,17 @@
-
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+import 'package:my_curiosity_resolved/entities/questionEntity.dart';
 
 import '../questionDetail/questionDetail.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() =>
-      _MyHomePageState(savedQuestions: List.generate(20, (i) {
-        return generateWordPairs().take(5).join(" ") + "?";
-      }));
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-
 class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState({this.savedQuestions}) : super();
+  _MyHomePageState() : super();
 
-  final List<String> savedQuestions;
+  final List<QuestionEntity> savedQuestions = List();
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +23,21 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => QuestionDetailPage())
-          );
+          _newQuestionButtonClick(context);
         },
       ),
     );
+  }
+
+  _newQuestionButtonClick(BuildContext context) async {
+    QuestionEntity newQuestionResults = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => QuestionDetailPage()));
+
+    print(newQuestionResults.toString());
+    setState(() {
+      savedQuestions.add(newQuestionResults);
+    });
+
   }
 
   Widget _buildQuestionList() {
@@ -52,13 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildRowQuestionList(int actualIndex) {
     return ListTile(
       title: Text(
-        savedQuestions[actualIndex],
-        style: TextStyle(
-          color: Colors.black54,
-          fontWeight: FontWeight.bold
-        ),
+        savedQuestions[actualIndex].question,
+        style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
         maxLines: 3,
-        
       ),
     );
   }
