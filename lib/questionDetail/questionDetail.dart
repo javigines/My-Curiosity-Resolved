@@ -13,17 +13,17 @@ class _QuestionDetailPage extends State<QuestionDetailPage> {
       appBar: AppBar(
         title: Text("Question Detail"),
       ),
-      body: _formComponent(),
+      body: _FormComponent(),
     );
   }
 }
 
-class _formComponent extends StatefulWidget {
+class _FormComponent extends StatefulWidget {
   @override
-  __formComponentState createState() => __formComponentState();
+  _FormComponentState createState() => _FormComponentState();
 }
 
-class __formComponentState extends State<_formComponent> {
+class _FormComponentState extends State<_FormComponent> {
   final questionController = TextEditingController();
   final questionAdditionalController = TextEditingController();
 
