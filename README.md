@@ -5,11 +5,11 @@ First App in Flutter in which I can write the curious questions I have along the
 ## Roadmap
 
 ### First Release (The basics)
-- [] Show a list of random questions
-- [] Add a toolbar button that redirect to a new screen
-- [] In the new screen add the elements to enter your question title and a save button
-- [] Start showing the questions forwarded from the "new question" screen.
-- [] Add persistance to the question list
+- [x] Show a list of random questions
+- [x] Add a fab that redirect to a new screen
+- [x] In the new screen add the elements to enter your question title and a save button
+- [x] Start showing the questions forwarded from the "new question" screen.
+- [x] Add persistance to the question list
 
 ### Second Release (The basics, part 2)
 - [] Add an answer to the quetion field in the "new question" screen.
@@ -17,7 +17,7 @@ First App in Flutter in which I can write the curious questions I have along the
 - [] Add remove question feature
 - [] Add status to the questions (Not-answered, not-completly-happy-with-anwer, answered)
 
-### Third Release (The confort update)
+### Third Release (The comfort update)
 - [] Add a/multiple links to the answer (That open the browser)
 - [] Add the capability to search in Google on long click in the question
 - [] Add an only viewing question screen with the edit button in the toolbar
