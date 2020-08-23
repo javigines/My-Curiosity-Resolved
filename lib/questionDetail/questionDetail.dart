@@ -71,7 +71,7 @@ class _FormComponentState extends State<_FormComponent> {
     QuestionEntity question = new QuestionEntity(
         question: questionController.text,
         questionDetails: questionAdditionalController.text);
-      
+
     question.id = entitiesBoxesInstance.questionBox.put(question);
     Navigator.of(context).pop(question);
   }

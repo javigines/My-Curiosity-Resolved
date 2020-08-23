@@ -9,7 +9,6 @@ String questionToJson(QuestionEntity data) => json.encode(data.toJson());
 
 @Entity()
 class QuestionEntity {
-
   @Id()
   int id;
 
@@ -21,7 +20,8 @@ class QuestionEntity {
     this.question,
     this.questionDetails,
   });
-  toString() => "QuestionEntity{id: $id, question: $question, questionDetails: $questionDetails}";
+  toString() =>
+      "QuestionEntity{id: $id, question: $question, questionDetails: $questionDetails}";
 
   factory QuestionEntity.fromJson(Map<String, dynamic> json) => QuestionEntity(
         id: json["resId"] == null ? null : json["resId"],

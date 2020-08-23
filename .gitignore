@@ -135,3 +135,4 @@ doc/api/
 
 # End of https://www.toptal.com/developers/gitignore/api/dart,visualstudiocode,flutter
 lib/objectbox.g.dart
+.vscode/settings.json
