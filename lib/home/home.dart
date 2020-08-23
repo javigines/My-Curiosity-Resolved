@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:my_curiosity_resolved/app/singleton.dart';
+import 'package:my_curiosity_resolved/entities/entitiesBoxes.dart';
 import 'package:my_curiosity_resolved/entities/questionEntity.dart';
+import 'package:my_curiosity_resolved/objectbox.g.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../questionDetail/questionDetail.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() {
+    return _MyHomePageState();
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState() : super();
 
-  final List<QuestionEntity> savedQuestions = List();
+  List<QuestionEntity> savedQuestions = List();
+  @override
+  void initState() {
+    super.initState();
+
+    getApplicationDocumentsDirectory().then((dir) {
+      singletonInstance.objectBoxStore =
+          Store(getObjectBoxModel(), directory: dir.path + "/objectbox");
+
+      setState(() {
+        this.savedQuestions = entitiesBoxesInstance.questionBox.getAll();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +38,9 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text("My Questions"),
       ),
-      body: savedQuestions.isEmpty ? _buildEmptyQuestionListLayout() : _buildQuestionList(),
+      body: savedQuestions.isEmpty
+          ? _buildEmptyQuestionListLayout()
+          : _buildQuestionList(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -33,9 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
     QuestionEntity newQuestion = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => QuestionDetailPage()));
 
-    if(newQuestion == null) return
-
-    print(newQuestion.toString());
+    if (newQuestion == null) return print(newQuestion.toString());
     setState(() {
       savedQuestions.add(newQuestion);
     });
@@ -43,29 +62,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildEmptyQuestionListLayout() {
     return Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Align(
-              alignment: FractionalOffset.center,
-              child: Image.asset(
-                'assets/no_questions_found.png',
-                width: 180,
-                height: 150,
-                alignment: Alignment.centerRight,
-              ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Align(
+            alignment: FractionalOffset.center,
+            child: Image.asset(
+              'assets/no_questions_found.png',
+              width: 180,
+              height: 150,
+              alignment: Alignment.centerRight,
             ),
-            SizedBox(
-              height: 32.0,
-            ),
-            Text(
-              "No Questions Found",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-      );
+          ),
+          SizedBox(
+            height: 32.0,
+          ),
+          Text(
+            "No Questions Found",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildQuestionList() {

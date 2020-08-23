@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../entities/questionEntity.dart';
+import 'package:my_curiosity_resolved/entities/entitiesBoxes.dart';
 
 class QuestionDetailPage extends StatefulWidget {
   @override
@@ -68,9 +69,10 @@ class _FormComponentState extends State<_FormComponent> {
 
   _saveQuestionData(BuildContext context) {
     QuestionEntity question = new QuestionEntity(
-        id: new DateTime.now().millisecondsSinceEpoch,
         question: questionController.text,
         questionDetails: questionAdditionalController.text);
+      
+    question.id = entitiesBoxesInstance.questionBox.put(question);
     Navigator.of(context).pop(question);
   }
 }

@@ -9,7 +9,7 @@ First App in Flutter in which I can write the curious questions I have along the
 - [x] Add a fab that redirect to a new screen
 - [x] In the new screen add the elements to enter your question title and a save button
 - [x] Start showing the questions forwarded from the "new question" screen.
-- [] Add persistance to the question list
+- [x] Add persistance to the question list
 
 ### Second Release (The basics, part 2)
 - [] Add an answer to the quetion field in the "new question" screen.
