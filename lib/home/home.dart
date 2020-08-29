@@ -18,6 +18,9 @@ class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState() : super();
 
   List<QuestionEntity> savedQuestions = List();
+  Offset _tapPosition;
+  int _tapIndex;
+
   @override
   void initState() {
     super.initState();
@@ -103,29 +106,121 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildRowQuestionList(int actualIndex) {
-    return ListTile(
-      title: Text(
-        savedQuestions[actualIndex].question,
-        style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
-        maxLines: 3,
-      ),
-      onTap: () {
-        _editQuestionScreen(context, actualIndex);
+    return GestureDetector(
+      onTapDown: (details) {
+        _storeTapQuestionPosition(details, actualIndex);
       },
+      child: ListTile(
+        title: Text(
+          savedQuestions[actualIndex].question,
+          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
+          maxLines: 3,
+        ),
+        onTap: () {
+          _editQuestionScreen(context, actualIndex);
+        },
+        onLongPress: _showCustomMenu,
+      ),
     );
   }
 
   _editQuestionScreen(BuildContext context, int index) async {
     QuestionEntity actualQuestion = savedQuestions[index];
 
-    QuestionEntity edittedQuestion = await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => QuestionDetailPage(edittingQuestion: actualQuestion,)));
+    QuestionEntity edittedQuestion =
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => QuestionDetailPage(
+                  edittingQuestion: actualQuestion,
+                )));
 
     print(edittedQuestion.toString());
     if (edittedQuestion == null) return;
 
     setState(() {
-      savedQuestions.replaceRange(index, index+1, [edittedQuestion]);
+      savedQuestions.replaceRange(index, index + 1, [edittedQuestion]);
     });
+  }
+
+  _removeQuestion(int index) {
+    QuestionEntity question = savedQuestions[index];
+
+    setState(() {
+      entitiesBoxesInstance.questionBox.remove(question.id);
+      savedQuestions.remove(question);
+    });
+  }
+
+  _storeTapQuestionPosition(TapDownDetails details, int index) {
+    _tapPosition = details.globalPosition;
+    _tapIndex = index;
+  }
+
+  _showCustomMenu() async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+
+    final delta = await showMenu(
+        context: context,
+        items: <PopupMenuEntry<int>>[ContextualMenuEntry()],
+        position: RelativeRect.fromRect(
+            _tapPosition & const Size(40, 40), // smaller rect, the touch area
+            Offset.zero & overlay.size // Bigger rect, the entire screen
+            ));
+
+    // This is how you handle user selection
+    // delta would be null if user taps on outside the popup menu
+    // (causing it to close without making selection)
+    if (delta == null) return;
+
+    switch (delta) {
+      //Edit
+      case 0:
+        _editQuestionScreen(context, this._tapIndex);
+        break;
+      //Remove
+      case 1:
+        _removeQuestion(this._tapIndex);
+        break;
+    }
+  }
+}
+
+class ContextualMenuEntry extends PopupMenuEntry<int> {
+  @override
+  double height = 80;
+  // height doesn't matter, as long as we are not giving
+  // initialValue to showMenu().
+
+  @override
+  bool represents(int n) => n == 1 || n == -1;
+
+  @override
+  ContextualMenuEntryState createState() => ContextualMenuEntryState();
+}
+
+class ContextualMenuEntryState extends State<ContextualMenuEntry> {
+  void _edit() {
+    // This is how you close the popup menu and return user selection.
+    Navigator.pop<int>(context, 0);
+  }
+
+  void _remove() {
+    // This is how you close the popup menu and return user selection.
+    Navigator.pop<int>(context, 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(child: FlatButton(onPressed: _edit, child: Text('Edit'))),
+        Expanded(
+            child: FlatButton(
+                onPressed: _remove,
+                child: Text(
+                  'Remove',
+                  style: TextStyle(color: Colors.red),
+                ))),
+      ],
+    );
   }
 }
