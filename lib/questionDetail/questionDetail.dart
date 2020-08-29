@@ -27,12 +27,12 @@ class _FormComponent extends StatefulWidget {
 class _FormComponentState extends State<_FormComponent> {
   final questionController = TextEditingController();
   final questionAdditionalController = TextEditingController();
+  final answerController = TextEditingController();
 
   bool _isButtonDisabled = true;
 
   @override
   Widget build(BuildContext context) {
-    
     questionController.addListener(() {
       _onQuestionTextChange();
     });
@@ -56,6 +56,14 @@ class _FormComponentState extends State<_FormComponent> {
             maxLines: null,
             decoration: InputDecoration(
               hintText: "To be precise, with my question I'm taking about...",
+            ),
+          ),
+          SizedBox(height: 48),
+          new TextField(
+            controller: answerController,
+            maxLines: null,
+            decoration: InputDecoration(
+              hintText: "The best answer I could find to this question is...",
             ),
           ),
           Expanded(
@@ -84,8 +92,9 @@ class _FormComponentState extends State<_FormComponent> {
 
   _saveQuestionData(BuildContext context) {
     QuestionEntity question = new QuestionEntity(
-        question: questionController.text,
-        questionDetails: questionAdditionalController.text);
+        question: questionController.text.trim(),
+        questionDetails: questionAdditionalController.text.trim(),
+        answer: answerController.text.trim());
 
     question.id = entitiesBoxesInstance.questionBox.put(question);
     Navigator.of(context).pop(question);

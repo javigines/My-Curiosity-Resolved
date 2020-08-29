@@ -54,7 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
     QuestionEntity newQuestion = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => QuestionDetailPage()));
 
-    if (newQuestion == null) return print(newQuestion.toString());
+    print(newQuestion.toString());
+    if (newQuestion == null) return;
+
     setState(() {
       savedQuestions.add(newQuestion);
     });

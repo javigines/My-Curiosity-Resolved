@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:4806912326542063196",
-      "lastPropertyId": "3:6155644104673289737",
+      "lastPropertyId": "4:8437960286628466733",
       "name": "QuestionEntity",
       "properties": [
         {
@@ -22,6 +22,11 @@
         {
           "id": "3:6155644104673289737",
           "name": "questionDetails",
+          "type": 9
+        },
+        {
+          "id": "4:8437960286628466733",
+          "name": "answer",
           "type": 9
         }
       ]
