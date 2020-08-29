@@ -109,6 +109,23 @@ class _MyHomePageState extends State<MyHomePage> {
         style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
         maxLines: 3,
       ),
+      onTap: () {
+        _editQuestionScreen(context, actualIndex);
+      },
     );
+  }
+
+  _editQuestionScreen(BuildContext context, int index) async {
+    QuestionEntity actualQuestion = savedQuestions[index];
+
+    QuestionEntity edittedQuestion = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => QuestionDetailPage(edittingQuestion: actualQuestion,)));
+
+    print(edittedQuestion.toString());
+    if (edittedQuestion == null) return;
+
+    setState(() {
+      savedQuestions.replaceRange(index, index+1, [edittedQuestion]);
+    });
   }
 }
