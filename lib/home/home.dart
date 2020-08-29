@@ -186,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class ContextualMenuEntry extends PopupMenuEntry<int> {
   @override
-  double height = 80;
+  final double height = 80;
   // height doesn't matter, as long as we are not giving
   // initialValue to showMenu().
 

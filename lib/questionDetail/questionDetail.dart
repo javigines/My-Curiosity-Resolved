@@ -112,6 +112,8 @@ class _FormComponentState extends State<_FormComponent> {
     this.questionAdditionalController.text =
         this.edittingQuestion.questionDetails;
     this.answerController.text = this.edittingQuestion.answer;
+
+    super.initState();
   }
 
   _onQuestionTextChange() {
@@ -136,7 +138,7 @@ class _FormComponentState extends State<_FormComponent> {
           questionAdditionalController.text.trim();
       this.edittingQuestion.answer = answerController.text.trim();
       question = this.edittingQuestion;
-      
+
     } else {
       question = new QuestionEntity(
           question: questionController.text.trim(),
