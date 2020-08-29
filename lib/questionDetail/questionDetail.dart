@@ -28,8 +28,15 @@ class _FormComponentState extends State<_FormComponent> {
   final questionController = TextEditingController();
   final questionAdditionalController = TextEditingController();
 
+  bool _isButtonDisabled = true;
+
   @override
   Widget build(BuildContext context) {
+    
+    questionController.addListener(() {
+      _onQuestionTextChange();
+    });
+
     return Container(
         child: Padding(
       padding: EdgeInsets.all(16.0),
@@ -57,7 +64,9 @@ class _FormComponentState extends State<_FormComponent> {
               child: RaisedButton(
                 color: Colors.deepPurpleAccent,
                 textColor: Colors.white,
-                onPressed: () => {_saveQuestionData(context)},
+                onPressed: _isButtonDisabled
+                    ? null
+                    : () => {_saveQuestionData(context)},
                 child: Text("Save my question"),
               ),
             ),
@@ -67,6 +76,12 @@ class _FormComponentState extends State<_FormComponent> {
     ));
   }
 
+  _onQuestionTextChange() {
+    setState(() {
+      _isButtonDisabled = questionController.text.isEmpty;
+    });
+  }
+
   _saveQuestionData(BuildContext context) {
     QuestionEntity question = new QuestionEntity(
         question: questionController.text,
@@ -74,5 +89,12 @@ class _FormComponentState extends State<_FormComponent> {
 
     question.id = entitiesBoxesInstance.questionBox.put(question);
     Navigator.of(context).pop(question);
+  }
+
+  @override
+  void dispose() {
+    questionController.dispose();
+    questionAdditionalController.dispose();
+    super.dispose();
   }
 }
