@@ -32,18 +32,20 @@ class _FormComponent extends StatefulWidget {
 
   @override
   _FormComponentState createState() =>
-      _FormComponentState(edittingQuestion: this.edittingQuestion);
+      _FormComponentState(questionObject: this.edittingQuestion);
 }
 
 class _FormComponentState extends State<_FormComponent> {
-  final QuestionEntity edittingQuestion;
-  _FormComponentState({this.edittingQuestion});
+  QuestionEntity questionObject;
+  _FormComponentState({this.questionObject});
 
   final questionController = TextEditingController();
   final questionAdditionalController = TextEditingController();
   final answerController = TextEditingController();
 
   bool _isButtonDisabled = true;
+  bool _isFinalAnswerDisabled = true;
+  bool finalAnswerCheckboxHasChange = false;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +88,13 @@ class _FormComponentState extends State<_FormComponent> {
               hintText: "The best answer I could find to this question is...",
             ),
           ),
+          SizedBox(height: 10),
+          CheckboxListTile(
+              title: Text("Are you happy with your answer?"),
+              value:
+                  _isFinalAnswerDisabled ? false : questionObject.finalAnswer,
+              onChanged:
+                  _isFinalAnswerDisabled ? null : _onQuestionStatusChange),
           Expanded(
             child: Align(
               alignment: FractionalOffset.bottomCenter,
@@ -106,48 +115,63 @@ class _FormComponentState extends State<_FormComponent> {
 
   @override
   initState() {
-    if (this.edittingQuestion == null) return;
+    if (this.questionObject == null) {
+      this.questionObject = QuestionEntity();
+      return;
+    }
 
-    this.questionController.text = this.edittingQuestion.question;
+    this.questionController.text = this.questionObject.question;
     this.questionAdditionalController.text =
-        this.edittingQuestion.questionDetails;
-    this.answerController.text = this.edittingQuestion.answer;
+        this.questionObject.questionDetails;
+    this.answerController.text = this.questionObject.answer;
+    if (this.questionObject.answer.isNotEmpty) {
+      _isFinalAnswerDisabled = false;
+    }
 
     super.initState();
   }
 
   _onQuestionTextChange() {
     setState(() {
-      _isButtonDisabled = questionController.text.isEmpty;
-
-      if (_isButtonDisabled || this.edittingQuestion == null) return;
-
-      _isButtonDisabled =
-          this.questionController.text == this.edittingQuestion.question &&
-              this.questionAdditionalController.text ==
-                  this.edittingQuestion.questionDetails &&
-              this.answerController.text == this.edittingQuestion.answer;
+      _isFinalAnswerDisabled = this.answerController.text.trim().isEmpty;
+      if (this.answerController.text != this.questionObject.answer) {
+        this.questionObject.finalAnswer = false;
+      }
+      _setupSaveButton();
     });
   }
 
+  _onQuestionStatusChange(bool isFinal) {
+    finalAnswerCheckboxHasChange = true;
+    _setupSaveButton();
+    setState(() {
+      this.questionObject.finalAnswer = isFinal;
+      if (isFinal) {
+        this.questionObject.answer = this.answerController.text.trim();
+      }
+    });
+  }
+
+  _setupSaveButton() {
+    _isButtonDisabled = questionController.text.isEmpty;
+    if (_isButtonDisabled) return;
+
+    _isButtonDisabled =
+        this.questionController.text == this.questionObject.question &&
+            this.questionAdditionalController.text ==
+                this.questionObject.questionDetails &&
+            this.answerController.text == this.questionObject.answer &&
+            !finalAnswerCheckboxHasChange;
+  }
+
   _saveQuestionData(BuildContext context) {
-    QuestionEntity question;
-    if (this.edittingQuestion != null) {
-      this.edittingQuestion.question = questionController.text.trim();
-      this.edittingQuestion.questionDetails =
-          questionAdditionalController.text.trim();
-      this.edittingQuestion.answer = answerController.text.trim();
-      question = this.edittingQuestion;
+    this.questionObject.question = questionController.text.trim();
+    this.questionObject.questionDetails =
+        questionAdditionalController.text.trim();
+    this.questionObject.answer = answerController.text.trim();
 
-    } else {
-      question = new QuestionEntity(
-          question: questionController.text.trim(),
-          questionDetails: questionAdditionalController.text.trim(),
-          answer: answerController.text.trim());
-    }
-
-    question.id = entitiesBoxesInstance.questionBox.put(question);
-    Navigator.of(context).pop(question);
+    questionObject.id = entitiesBoxesInstance.questionBox.put(questionObject);
+    Navigator.of(context).pop(questionObject);
   }
 
   @override

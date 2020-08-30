@@ -15,15 +15,17 @@ class QuestionEntity {
   String question;
   String questionDetails;
   String answer;
+  bool finalAnswer;
 
   QuestionEntity({
     this.id,
     this.question,
     this.questionDetails,
     this.answer,
+    this.finalAnswer,
   });
   toString() =>
-      "QuestionEntity{id: $id, question: $question, questionDetails: $questionDetails, answer: $answer}";
+      "QuestionEntity{id: $id, question: $question, questionDetails: $questionDetails, answer: $answer, finalAnswer: $finalAnswer}";
 
   factory QuestionEntity.fromJson(Map<String, dynamic> json) => QuestionEntity(
         id: json["resId"] == null ? null : json["resId"],
@@ -32,6 +34,8 @@ class QuestionEntity {
             json["questionDetails"] == null ? null : json["questionDetails"],
         answer:
             json["answer"] == null ? null : json["answer"],
+        finalAnswer:
+            json["finalAnswer"] == null ? null : json["finalAnswer"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -39,5 +43,6 @@ class QuestionEntity {
         "question": question == null ? null : question,
         "questionDetails": questionDetails == null ? null : questionDetails,
         "answer": answer == null ? null : answer,
+        "finalAnswer": finalAnswer == null ? null : finalAnswer,
       };
 }
