@@ -12,10 +12,11 @@ First App in Flutter in which I can write the curious questions I have along the
 - [x] Add persistance to the question list
 
 ### Second Release (The basics, part 2)
-- [] Add an answer to the quetion field in the "new question" screen.
-- [] Add capability of click on questions and redirect to a edit the question screen (Reuse "new question" screen)
-- [] Add remove question feature
-- [] Add status to the questions (Not-answered, not-completly-happy-with-anwer, answered)
+- [x] Add an answer to the question field in the "new question" screen.
+- [x] Add capability of click on questions and redirect to a edit the question screen (Reuse "new question" screen)
+- [x] Add remove question feature
+- [x] Add status to the questions (Not-answered ❓, not-completly-happy-with-answer 🤔, answered 👌)
+- [x] Add creation and modified dates
 
 ### Third Release (The comfort update)
 - [] Add a/multiple links to the answer (That open the browser)
