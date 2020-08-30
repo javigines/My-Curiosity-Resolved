@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_curiosity_resolved/app/singleton.dart';
 import 'package:my_curiosity_resolved/entities/entitiesBoxes.dart';
 import 'package:my_curiosity_resolved/entities/questionEntity.dart';
@@ -30,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Store(getObjectBoxModel(), directory: dir.path + "/objectbox");
 
       setState(() {
-        this.savedQuestions = entitiesBoxesInstance.questionBox.getAll();
+        this.savedQuestions = entitiesBoxesInstance.questionBox.getAll().reversed.toList();
       });
     });
   }
@@ -61,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (newQuestion == null) return;
 
     setState(() {
-      savedQuestions.add(newQuestion);
+      savedQuestions.insert(0, newQuestion);
     });
   }
 
@@ -119,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           maxLines: 2,
         ),
         dense: true,
+        subtitle: _retrieveSubtitleWidget(questionObject),
         trailing: Text(
           questionObject.answer.isEmpty
               ? "❓"
@@ -133,6 +135,55 @@ class _MyHomePageState extends State<MyHomePage> {
         onLongPress: _showCustomMenu,
       ),
     );
+  }
+
+  Widget _retrieveSubtitleWidget(QuestionEntity question) {
+
+    return Column(
+      children: [
+        Align( 
+          alignment: Alignment.centerLeft,
+          child: _retrieveSubtitleText(question),
+        ),
+        SizedBox(height: 4),
+        Align( 
+          alignment: Alignment.centerLeft,
+         child: 
+         Text(
+           "${DateFormat.yMEd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(question.creationDate))}",
+           style: TextStyle(
+             fontSize: 11,
+             color: Colors.blueGrey.shade200
+           ),
+           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _retrieveSubtitleText(QuestionEntity question) {
+    if (question.answer.isNotEmpty)
+      return Text(
+        question.answer,
+        style: TextStyle(
+          color: Colors.greenAccent.shade400,
+          fontSize: 13
+          ),
+        maxLines: 5,
+      );
+    else if (question.questionDetails.isNotEmpty)
+      return Text(
+        question.questionDetails,
+        maxLines: 2,
+      );
+    else
+      return SizedBox(height: 0);
+
+    // Text(
+    //     questionObject.questionDetails,
+    //     //style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
+    //     maxLines: 2,
+    //   ),
   }
 
   _editQuestionScreen(BuildContext context, int index) async {

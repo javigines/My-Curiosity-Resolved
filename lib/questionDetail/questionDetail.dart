@@ -116,7 +116,7 @@ class _FormComponentState extends State<_FormComponent> {
   @override
   initState() {
     if (this.questionObject == null) {
-      this.questionObject = QuestionEntity();
+      this.questionObject = QuestionEntity(creationDate: DateTime.now().millisecondsSinceEpoch);
       return;
     }
 
