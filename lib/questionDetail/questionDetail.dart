@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../entities/questionEntity.dart';
 import 'package:my_curiosity_resolved/entities/entitiesBoxes.dart';
 
@@ -95,28 +96,47 @@ class _FormComponentState extends State<_FormComponent> {
                   _isFinalAnswerDisabled ? false : questionObject.finalAnswer,
               onChanged:
                   _isFinalAnswerDisabled ? null : _onQuestionStatusChange),
-          Expanded(
-            child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: RaisedButton(
-                color: Colors.deepPurpleAccent,
-                textColor: Colors.white,
-                onPressed: _isButtonDisabled
-                    ? null
-                    : () => {_saveQuestionData(context)},
-                child: Text("Save my question"),
-              ),
-            ),
-          ),
+          Expanded(child: _retrieveFooter()),
         ],
       ),
     ));
   }
 
+  Widget _retrieveFooter() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        RaisedButton(
+          color: Colors.deepPurpleAccent,
+          textColor: Colors.white,
+          onPressed:
+              _isButtonDisabled ? null : () => {_saveQuestionData(context)},
+          child: Text("Save my question"),
+        ),
+        SizedBox(height: 10),
+        questionObject.creationDate == null
+            ? SizedBox(height: 0)
+            :Text(
+          "Created: ${DateFormat.yMEd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(questionObject.creationDate))}",
+          style: TextStyle(color: Colors.blueGrey.shade200),
+        ),
+        questionObject.modifiedDate == null
+            ? SizedBox(height: 0)
+            : Text(
+                "Last Modified: ${DateFormat.yMEd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(questionObject.modifiedDate))}",
+                style: TextStyle(color: Colors.blueGrey.shade200),
+              ),
+      ],
+    );
+  }
+
   @override
   initState() {
     if (this.questionObject == null) {
-      this.questionObject = QuestionEntity(creationDate: DateTime.now().millisecondsSinceEpoch);
+      this.questionObject =
+          QuestionEntity();
       return;
     }
 
@@ -165,10 +185,14 @@ class _FormComponentState extends State<_FormComponent> {
   }
 
   _saveQuestionData(BuildContext context) {
+    var time = DateTime.now().millisecondsSinceEpoch;
+    if (this.questionObject.creationDate == null) this.questionObject.creationDate = time;
+    
     this.questionObject.question = questionController.text.trim();
     this.questionObject.questionDetails =
         questionAdditionalController.text.trim();
     this.questionObject.answer = answerController.text.trim();
+    this.questionObject.modifiedDate = time;
 
     questionObject.id = entitiesBoxesInstance.questionBox.put(questionObject);
     Navigator.of(context).pop(questionObject);

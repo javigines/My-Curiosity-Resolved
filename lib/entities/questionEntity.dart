@@ -17,6 +17,7 @@ class QuestionEntity {
   String answer;
   bool finalAnswer;
   int creationDate;
+  int modifiedDate;
 
   QuestionEntity({
     this.id,
@@ -25,9 +26,10 @@ class QuestionEntity {
     this.answer,
     this.finalAnswer,
     this.creationDate,
+    this.modifiedDate,
   });
   toString() =>
-      "QuestionEntity{id: $id, question: $question, questionDetails: $questionDetails, answer: $answer, finalAnswer: $finalAnswer, creationDate: $creationDate}";
+      "QuestionEntity{id: $id, question: $question, questionDetails: $questionDetails, answer: $answer, finalAnswer: $finalAnswer, creationDate: $creationDate, modifiedDate: $modifiedDate}";
 
   factory QuestionEntity.fromJson(Map<String, dynamic> json) => QuestionEntity(
         id: json["resId"] == null ? null : json["resId"],
@@ -40,6 +42,8 @@ class QuestionEntity {
             json["finalAnswer"] == null ? null : json["finalAnswer"],
         creationDate:
             json["creationDate"] == null ? null : json["creationDate"],
+        modifiedDate:
+            json["modifiedDate"] == null ? null : json["modifiedDate"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +53,6 @@ class QuestionEntity {
         "answer": answer == null ? null : answer,
         "finalAnswer": finalAnswer == null ? null : finalAnswer,
         "creationDate": creationDate == null ? null : creationDate,
+        "modifiedDate": modifiedDate == null ? null : modifiedDate,
       };
 }

@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:4806912326542063196",
-      "lastPropertyId": "6:1999724046159342739",
+      "lastPropertyId": "7:1102643436467190453",
       "name": "QuestionEntity",
       "properties": [
         {
@@ -37,6 +37,11 @@
         {
           "id": "6:1999724046159342739",
           "name": "creationDate",
+          "type": 6
+        },
+        {
+          "id": "7:1102643436467190453",
+          "name": "modifiedDate",
           "type": 6
         }
       ]
