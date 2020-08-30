@@ -106,15 +106,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildRowQuestionList(int actualIndex) {
+    QuestionEntity questionObject = savedQuestions[actualIndex];
+
     return GestureDetector(
       onTapDown: (details) {
         _storeTapQuestionPosition(details, actualIndex);
       },
       child: ListTile(
         title: Text(
-          savedQuestions[actualIndex].question,
+          questionObject.question,
           style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
-          maxLines: 3,
+          maxLines: 2,
+        ),
+        dense: true,
+        trailing: Text(
+          questionObject.answer.isEmpty
+              ? "❓"
+              : (questionObject.finalAnswer ? "👌" : "🤔"),
+          style: TextStyle(
+            fontSize: 24,
+          ),
         ),
         onTap: () {
           _editQuestionScreen(context, actualIndex);
